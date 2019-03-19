@@ -1,4 +1,5 @@
 import requests
+import json as j
 
 server = 'http://18.218.219.1'
 
@@ -34,7 +35,7 @@ def get_response():
     headers = {
         'Content-Type': 'application/json',
     }
-    data = '{"data":{"credentials":"92b5841ef89f79c5b359226f24d194a4","account_name":"master"}}'
+    data = '{"data":{"credentials":"92b5841ef89f79c5b359226f24d194","account_name":"master"}}'
 
     _response = requests.put(
         server + ':8000/v2/user_auth', headers=headers, data=data)
@@ -96,12 +97,12 @@ def get_web_sockets():
     return wesockets
 
 
-# if __name__ == '__main__':
-#     auth_token = get_auth_token()
-#
-#     get = create_user(auth_token).text
-#
-#     parsed = j.loads(get)
-#
-#     # #print(parsed)
-#     print(j.dumps(parsed, indent=2, sort_keys=True))
+if __name__ == '__main__':
+    auth_token = get_auth_token()
+
+    get = get_web_sockets().text
+
+    parsed = j.loads(get)
+
+    # #print(parsed)
+    print(j.dumps(parsed, indent=2, sort_keys=True))

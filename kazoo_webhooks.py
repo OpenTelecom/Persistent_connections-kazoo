@@ -56,13 +56,15 @@ def api_kz_hook():
         assert request.method == 'POST'
         print('assertions passed')
 
+    # if request.headers['Content-Type'] == 'x-www-form-urlencoded':
     print(request.form)
+    return 'ok'
+
+    # print(request.form)
     # type_t = request.args.get('type')
     # id_t = request.args.get('id')
     # account_id = request.args.get('account_id')
     # print(account_id, type_t, action, id_t)
-
-    return 'OK'
 
 
 if __name__ == '__main__':

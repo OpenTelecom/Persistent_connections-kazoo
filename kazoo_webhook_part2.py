@@ -3,17 +3,21 @@ import kazoo_put as kp
 import requests
 import kazoo_websocket as ws
 
-my_server = 'http://cc036d94.ngrok.io/kazoo'
+my_server = 'http://662d68d6.ngrok.io/kazoo'
 my_server1 = 'https://webhook.site/31b5f964-b43e-48c8-8073-a2e3b2934620'
 
 HOST = '18.218.219.1'
 auth_token = kp.get_auth_token()
 acc_id = kp.get_acc_id()
 server = kp.server
-headers = kp.get_headers(auth=auth_token)
+headers = {
+        'X-Auth-Token': auth_token,
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+# headers = kp.get_headers(auth=auth_token)
 
 message = {"data": {
-        "name": "Destroy",
+        "name": "Destroy2",
         "uri": my_server,
         "http_verb": "post",
         "hook": "object",

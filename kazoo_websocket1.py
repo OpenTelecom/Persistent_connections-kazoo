@@ -5,6 +5,10 @@ import json as j
 from websockets import ConnectionClosed
 import kazoo_put as kp
 
+"""
+Makes second connection to kazoo for user creation
+"""
+
 
 # Global Variables
 HOST = '18.218.219.1'
@@ -29,7 +33,7 @@ message = {
     'request_id': acc_id,
     'data': {
         'account_id': acc_id,
-        'binding': 'object.doc_deleted.user'
+        'binding': 'object.doc_created.user'
     }
 }
 
