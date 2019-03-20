@@ -35,7 +35,7 @@ def get_response():
     headers = {
         'Content-Type': 'application/json',
     }
-    data = '{"data":{"credentials":"92b5841ef89f79c5b359226f24d194","account_name":"master"}}'
+    data = '{"data":{"credentials":"92b5841ef89f79c5b359226f24d194a4","account_name":"master"}}'
 
     _response = requests.put(
         server + ':8000/v2/user_auth', headers=headers, data=data)
@@ -100,9 +100,9 @@ def get_web_sockets():
 if __name__ == '__main__':
     auth_token = get_auth_token()
 
-    get = get_web_sockets().text
+    get = get_response()
 
-    parsed = j.loads(get)
+    parsed = j.loads(get.json())
 
-    # #print(parsed)
+    # print(get.json())
     print(j.dumps(parsed, indent=2, sort_keys=True))

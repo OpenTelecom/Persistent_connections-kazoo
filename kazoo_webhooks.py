@@ -67,5 +67,27 @@ def api_kz_hook():
     # print(account_id, type_t, action, id_t)
 
 
+@app.route('/stripe', methods=['POST', 'GET'])
+def api_stripe_webhook():
+    with app.test_request_context('/stripe', method='POST'):
+        """
+        now you can do something with the request until the
+        end of the with block, such as basic assertions:
+        """
+
+        assert request.path == '/stripe'
+        assert request.method == 'POST'
+        print('assertions passed')
+
+    print(request.form)
+    return 'ok'
+
+    # print(request.form)
+    # type_t = request.args.get('type')
+    # id_t = request.args.get('id')
+    # account_id = request.args.get('account_id')
+    # print(account_id, type_t, action, id_t)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
