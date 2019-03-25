@@ -1,6 +1,7 @@
 import websockets as w
 import asyncio
 import json as j
+import insert_data as insert
 
 from websockets import ConnectionClosed
 import kazoo_put as kp
@@ -29,7 +30,7 @@ message = {
     'request_id': acc_id,
     'data': {
         'account_id': acc_id,
-        'binding': 'object.doc_deleted.user'
+        'binding': 'object.doc_created.user'
     }
 }
 
@@ -45,10 +46,13 @@ async def consumer(event):
     item_type = data.get('type')
     item_id = data.get('id')
     account_id = data.get('account_id')
-    print(item_type, item_id, account_id)
+    print('this are the is items: ', item_type, item_id, account_id)
     print()
     item = kp.get_items(item_type, account_id, item_id, auth=auth_token)
     print(item)
+    user_name = item['data']['caller_id']['internal']['name']
+    uid = insert.insert_user(item_id, event, user_name)
+    print(uid)
 
 
 async def hello():

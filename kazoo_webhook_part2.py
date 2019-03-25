@@ -21,12 +21,12 @@ message = {"data": {
         "uri": my_server,
         "http_verb": "post",
         "hook": "object",
-        "action": "doc_deleted",
+        "action": "doc_created",
         "type": "account",
         "retries": 3,
         "custom_data": {
             "type": "user",
-            "action": "doc_deleted"
+            "action": "doc_created"
         }
     }
 }
