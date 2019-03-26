@@ -3,7 +3,7 @@ import kazoo_put as kp
 import requests
 import kazoo_websocket as ws
 
-my_server = 'http://662d68d6.ngrok.io/kazoo'
+my_server = 'http://923092c9.ngrok.io/kazoo'
 my_server1 = 'https://webhook.site/31b5f964-b43e-48c8-8073-a2e3b2934620'
 
 HOST = '18.218.219.1'

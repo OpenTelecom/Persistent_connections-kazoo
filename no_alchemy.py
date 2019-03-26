@@ -7,7 +7,7 @@ def create_tables():
     commands = (
         """
         CREATE TABLE users1 (
-            user_id TEXT PRIMARY KEY,
+            user_id VARCHAR(255) PRIMARY KEY,
             all_details JSON,
             user_name VARCHAR(255) NOT NULL
         )

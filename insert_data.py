@@ -1,12 +1,13 @@
 
 import psycopg2
 from config import config
+import json as j
 
 
 def insert_user(user_name, all_details, user_id):
     """ insert a new vendor into the vendors table """
-    sql = """INSERT INTO users(user_id, all_details, user_name)
-             VALUES(%s);"""
+    sql = f"""INSERT INTO users1(user_id, all_details, user_name)
+             VALUES('{user_id}', '{j.dumps(all_details)}', '{user_name}');"""
     conn = None
     # user_id = None
     # user = None
@@ -18,10 +19,10 @@ def insert_user(user_name, all_details, user_id):
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(sql, (user_id, all_details, user_name,))
+        cur.execute(sql)
         # get the generated id back
-        user_id = cur.fetchone()[0]
-        user = cur.fetchone()[1]
+        # user_id = cur.fetchone()[0]
+        # user = cur.fetchone()[1]
         # commit the changes to the database
         conn.commit()
         # close communication with the database
