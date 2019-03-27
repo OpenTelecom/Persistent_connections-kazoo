@@ -7,10 +7,10 @@ import json as j
 def insert_user(user_name, all_details, user_id):
     """ insert a new vendor into the vendors table """
     sql = f"""INSERT INTO users1(user_id, all_details, user_name)
-             VALUES('{user_id}', '{j.dumps(all_details)}', '{user_name}');"""
+             VALUES('{user_id}', '{j.dumps(all_details)}', '{user_name}') RETURNING user_id;"""
     conn = None
     # user_id = None
-    # user = None
+    user = None
     try:
         # read database configuration
         params = config()
@@ -20,8 +20,8 @@ def insert_user(user_name, all_details, user_id):
         cur = conn.cursor()
         # execute the INSERT statement
         cur.execute(sql)
-        # get the generated id back
-        # user_id = cur.fetchone()[0]
+        # Causing error for some reason lol
+        user = cur.fetchone()
         # user = cur.fetchone()[1]
         # commit the changes to the database
         conn.commit()
@@ -32,7 +32,7 @@ def insert_user(user_name, all_details, user_id):
     finally:
         if conn is not None:
             conn.close()
-    # print(user)
+    print(user)
     return user_id
 
 
