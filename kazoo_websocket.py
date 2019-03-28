@@ -1,16 +1,19 @@
 import websockets as w
 import asyncio
 import json as j
-import insert_data as insert
+from user import User
+from datetime import date
 
 from websockets import ConnectionClosed
 import kazoo_put as kp
+from base import Session, engine, Base
 
 
 # Global Variables
 HOST = '18.218.219.1'
 auth_token = kp.get_auth_token()
 acc_id = kp.get_acc_id()
+object_id = ''
 
 
 def jsonify(d):
@@ -35,33 +38,50 @@ message = {
 }
 
 
+def create_id():
+    return object_id
+
+
 async def consumer(event):
     """
     consumer code that prints the notifications from messages sent by the websocket connection
     - does something with the messages sent by server
 
     """
-    # print('event 1', event)
+
     event = j.loads(event)
-    # print('event 2', data)
-    # data1 = j.dumps(data)
-    # print(data1)
 
     data = event['data']
     item_type = data.get('type')
     item_id = data.get('id')
     account_id = data.get('account_id')
 
-    print('this are the is items: ', item_type, item_id, account_id)
-    print()
+    print(item_type)
 
-    item = kp.get_items(item_type, account_id, item_id, auth=auth_token)
-    print(item)
+    Base.metadata.create_all(engine)
+    session = Session()
 
-    user_name = item['data']['caller_id']['internal']['name']
+    if item_type == 'user':
+        item = kp.get_items(item_type, account_id, item_id, auth=auth_token)
+        print(item)
+        data = item['data']
+        user_name = data['caller_id']['internal']['name']
+        email = data.get('email')
+        user = User(item_id, user_name, date(2015, 4, 2), 3, email)
+        session.add(user)
 
-    uid = insert.insert_user(user_name, item, item_id)
-    print(uid)
+    session.commit()
+    session.close()
+
+    # global object_id
+    # object_id = data.get('id')
+    # print('this is object id', object_id)
+
+    # item = kp.get_items(item_type, account_id, item_id, auth=auth_token)
+    # print(item)
+
+    # uid = insert.insert_user(user_name, item, item_id)
+    # print(uid)
 
 
 async def hello():

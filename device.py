@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
+from kazoo_websocket import create_id
 
 from base import Base
 
@@ -7,7 +8,7 @@ from base import Base
 class Device(Base):
     __tablename__ = 'devices'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, default=create_id())
     extension = Column(Integer)
     device_type = Column(String)
     user_id = Column(Integer, ForeignKey('users3.id'))
