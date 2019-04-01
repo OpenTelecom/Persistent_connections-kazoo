@@ -4,10 +4,10 @@ from config import config
 import json as j
 
 
-def insert_user(user_name, all_details, user_id):
+def insert_user(account_id, name, create_date):
     """ insert a new vendor into the vendors table """
-    sql = f"""INSERT INTO users1(user_id, all_details, user_name)
-             VALUES('{user_id}', '{j.dumps(all_details)}', '{user_name}') RETURNING user_id;"""
+    sql = f"""INSERT INTO accounts(id, name, create_date)
+             VALUES('{account_id}', '{name}', '{create_date}');"""
     conn = None
     # user_id = None
     user = None
@@ -33,7 +33,7 @@ def insert_user(user_name, all_details, user_id):
         if conn is not None:
             conn.close()
     print(user)
-    return user_id
+    return 'ok'
 
 
 def insert_vendor_list(vendor_list):

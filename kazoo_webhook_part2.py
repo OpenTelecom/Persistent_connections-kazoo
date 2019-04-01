@@ -3,7 +3,7 @@ import kazoo_put as kp
 import requests
 import kazoo_websocket as ws
 
-my_server = 'http://923092c9.ngrok.io/kazoo'
+my_server = 'http://d5cec02f.ngrok.io/kazoo'
 my_server1 = 'https://webhook.site/31b5f964-b43e-48c8-8073-a2e3b2934620'
 
 HOST = '18.218.219.1'
@@ -12,7 +12,7 @@ acc_id = kp.get_acc_id()
 server = kp.server
 headers = {
         'X-Auth-Token': auth_token,
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
     }
 # headers = kp.get_headers(auth=auth_token)
 
@@ -26,6 +26,22 @@ message = {"data": {
         "retries": 3,
         "custom_data": {
             "type": "user",
+            "action": "doc_created"
+        }
+    }
+}
+
+message2 = {"data": {
+        "name": "account3",
+        "uri": my_server,
+        "http_verb": "post",
+        "hook": "object",
+        "action": "doc_created",
+        "type": "account",
+        "include_subaccounts": "true",
+        "retries": 3,
+        "custom_data": {
+            "type": "account",
             "action": "doc_created"
         }
     }
@@ -60,13 +76,16 @@ def create_webhook():
     :return:
     """
 
-    response = requests.put(kp.server + ':8000/v2/accounts/' + kp.get_acc_id() + '/webhooks', headers=headers, data=ws.jsonify(message))
+    response = requests.put(kp.server + ':8000/v2/accounts/' + kp.get_acc_id() + '/webhooks', headers=headers, data=ws.jsonify(message2))
 
     return response
 
 
 if __name__ == '__main__':
     get = create_webhook().text
+    # get1 = get_webhooks()
+
+    # parsed1 = get1.json()
 
     parsed = j.loads(get)
 

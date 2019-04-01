@@ -44,6 +44,7 @@ async def consumer(event):
     """
 
     event = j.loads(event)
+    print(j.dumps(event, indent=2, sort_keys=True))
 
     data = event['data']
     item_type = data.get('type')

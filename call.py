@@ -2,7 +2,6 @@ from sqlalchemy import Column, String, Integer, Date, ForeignKey
 from sqlalchemy.orm import relationship
 
 from base import Base
-from kazoo_websocket import create_id
 
 
 class Call(Base):

@@ -4,6 +4,8 @@ import json as j
 
 from websockets import ConnectionClosed
 import kazoo_put as kp
+from data_alchemy import insert_data
+
 
 """
 Makes second connection to kazoo for user creation
@@ -33,7 +35,7 @@ message = {
     'request_id': acc_id,
     'data': {
         'account_id': acc_id,
-        'binding': 'object.doc_created.user'
+        'binding': 'object.doc_created.device'
     }
 }
 
@@ -51,8 +53,16 @@ async def consumer(event):
     account_id = data.get('account_id')
     print(item_type, item_id, account_id)
     print()
-    item = kp.get_items(item_type, account_id, item_id, auth=auth_token)
-    print(item)
+    insert_data(item_type, account_id, item_id, auth_token)
+
+    # item = kp.get_items(item_type, account_id, item_id, auth=auth_token)
+    # print(item)
+    # data = item['data']
+    # print(data)
+    # device_type = data.get('device_type')
+    # owner_id = data.get('owner_id')
+    # name = data.get('name')
+    # print('name , type, owner_id', name, device_type, owner_id)
 
 
 async def hello():

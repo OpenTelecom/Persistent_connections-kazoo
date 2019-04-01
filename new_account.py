@@ -43,6 +43,22 @@ def get_response():
     return _response
 
 
+def get_response1():
+    """
+    Get the auth_token from crossbar
+    :return: returns the http response from crossbar with auth_token
+    """
+    headers = {
+        'Content-Type': 'application/json',
+    }
+    data = '{"data":{"credentials":"92b5841ef89f79c5b359226f24d194a4","account_name":"Farah Alaa"}}'
+
+    _response = requests.put(
+        server + ':8000/v2/user_auth', headers=headers, data=data)
+
+    return _response
+
+
 # Parse json file to get auth_token
 def get_auth_token():
     """
@@ -50,11 +66,22 @@ def get_auth_token():
 
     :return: returns the auth_token parsed from the http response
     """
-    key = get_response()
+    key = get_response1()
     key = key.json()
     auth_token_og = key['auth_token']
 
     return auth_token_og
+
+
+def get_api():
+
+    auth = get_auth_token()
+
+    headers = get_headers(auth)
+
+    api = requests.get(server + ':8000/v2/accounts/f50cfc5fad82d57c0820d3b8ee081361/api_key', headers=headers)
+
+    return api
 
 
 def get_acc_id():
@@ -63,7 +90,7 @@ def get_acc_id():
 
     :return: returns acc id
     """
-    _key = get_response()
+    _key = get_response1()
     _key = _key.json()
     y = _key['data']['account_id']
 
@@ -98,9 +125,9 @@ def get_web_sockets():
 
 
 if __name__ == '__main__':
-    auth_token = get_auth_token()
+    # auth_token = get_auth_token()
 
-    get = get_response()
+    get = get_api()
     parsed = get.json()
 
     # parsed = j.loads(get.json())
