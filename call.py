@@ -7,10 +7,10 @@ from base import Base
 class Call(Base):
     __tablename__ = 'calls'
 
-    id = Column(Integer, primary_key=True, default=create_id())
+    id = Column(String, primary_key=True)
     create_date = Column(Date)
     to = Column(String)
-    form_m = Column(String)
+    from_m = Column(String)
     duration = Column(Integer)
     user_id = Column(Integer, ForeignKey('users3.id'))
     user = relationship("User", backref="devices")

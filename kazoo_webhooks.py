@@ -46,7 +46,7 @@ def api_gh_message():
             return get_info
 
 
-@app.route('/kazoo', methods=['POST'])
+@app.route('/kazo', methods=['POST'])
 def api_kz_hook():
     with app.test_request_context('/kazoo', method='POST'):
         """
@@ -59,22 +59,22 @@ def api_kz_hook():
         print('assertions passed')
 
     # if request.headers['Content-Type'] == 'x-www-form-urlencoded':
-    item_id = request.form.get('id')
-    item_type = request.form.get('type')
-    account_id = request.form.get('account_id')
-
-    print('this are the items: ', item_type, item_id, account_id)
-
-    response = get_items(item_type, account_id, item_id, get_auth_token())
-
-    print('this is my response', response)
-
-    user_name = response['data']['caller_id']['internal']['name']
-    print(user_name)
-    # response = json.loads(response)
-
-    var = db.insert_user(user_name, response, item_id)
-    print('this is var', var)
+    # item_id = request.form.get('id')
+    # item_type = request.form.get('type')
+    # account_id = request.form.get('account_id')
+    #
+    # print('this are the items: ', item_type, item_id, account_id)
+    #
+    # response = get_items(item_type, account_id, item_id, get_auth_token())
+    #
+    # print('this is my response', response)
+    #
+    # user_name = response['data']['caller_id']['internal']['name']
+    # print(user_name)
+    # # response = json.loads(response)
+    #
+    # var = db.insert_user(user_name, response, item_id)
+    # print('this is var', var)
 
     print(request.form)
     return 'ok'

@@ -5,7 +5,7 @@ import json as j
 
 from websockets import ConnectionClosed
 import kazoo_put as kp
-from data_alchemy import insert_data
+
 
 
 # Global Variables
@@ -35,6 +35,16 @@ message = {
     }
 }
 
+message1 = {
+    'action': 'subscribe',
+    'auth_token': auth_token,
+    'request_id': acc_id,
+    'data': {
+        'account_id': acc_id,
+        'binding': 'call.CHANNEL_CREATE'
+    }
+}
+
 
 async def consumer(event):
     """
@@ -44,13 +54,14 @@ async def consumer(event):
     """
 
     event = j.loads(event)
+    print(j.dumps(event, indent=2, sort_keys=True))
 
-    data = event['data']
-    item_type = data.get('type')
-    item_id = data.get('id')
-    account_id = data.get('account_id')
+    # data = event['data']
+    # item_type = data.get('type')
+    # item_id = data.get('id')
+    # account_id = data.get('account_id')
 
-    insert_data(item_type, account_id=account_id, item_id=item_id, auth=auth_token)
+    # print(f'item_type: {item_type}, item_id: {item_id}, account_id: {account_id}')
 
 
 async def hello():
@@ -61,7 +72,7 @@ async def hello():
     print('trying to connect')
     async with w.connect(f"ws://{HOST}:5555") as ws:
         print('connected')
-        await ws.send(jsonify(message))
+        await ws.send(jsonify(message1))
         try:
             response = await ws.recv()
             print(response)

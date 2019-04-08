@@ -4,7 +4,7 @@ import kazoo_put as kp
 from user import User
 from device import Device
 from account import Account
-from datetime import date
+from datetime import datetime
 
 
 def insert_data(item_type, account_id, item_id, auth):
@@ -14,13 +14,19 @@ def insert_data(item_type, account_id, item_id, auth):
 
     # def __init__(self, id_id, name, create_date, no_devices, email, account):
     def create_user():
+        print('Creating Users WOWOWOWOWOWO')
         item_user = kp.get_items(item_type=item_type, account_id=account_id, item_id=item_id, auth=auth)
-        print(item_user)
+        print('in data_alchemy', item_user)
+
         data = item_user['data']
-        user_name = data['caller_id']['internal']['name']
-        email = data.get('email')
+        if data.get('priv_level') == 'admin':
+            user_name = 'admin'
+            email = 'master@local.com'
+        else:
+            user_name = data['caller_id']['internal']['name']
+            email = data.get('email')
         account = session.query(Account).get(account_id)
-        user = User(item_id, user_name, date(2015, 4, 2), 3, email, account)
+        user = User(item_id, user_name, datetime.now(), 1, email, account)
         session.add(user)
 
     # def __init__(self, id_1,  name, device_type):
@@ -43,11 +49,18 @@ def insert_data(item_type, account_id, item_id, auth):
         print(item_account)
         data = item_account['data']
         account_name = data.get('name')
-        account = Account(item_id, account_name, date(2015, 4, 2))
+        account = Account(item_id, account_name, datetime.now())
         session.add(account)
 
     if item_type == 'user':
-        create_user()
+        print('inserting users')
+        # create_user()
+        q = session.query(User.id).filter(User.id == item_id)
+        print(q)
+        if not session.query(q.exists()).scalar():
+            # q = session.query(User).filter(User.id == item_id)
+            # session.query(q.)
+            create_user()
 
     if item_type == 'account':
         create_account()

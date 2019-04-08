@@ -3,7 +3,7 @@ import kazoo_put as kp
 import requests
 import kazoo_websocket as ws
 
-my_server = 'http://d5cec02f.ngrok.io/kazoo'
+my_server = 'http://bd508a13.ngrok.io/kazoo'
 my_server1 = 'https://webhook.site/31b5f964-b43e-48c8-8073-a2e3b2934620'
 
 HOST = '18.218.219.1'
@@ -50,9 +50,9 @@ message2 = {"data": {
 
 message1 = {"data": {
         "name": "Destroy",
-        "uri": my_server1,
+        "uri": my_server,
         "http_verb": "post",
-        "hook": "channel_destroy",
+        "hook": "channel_create",
         "retries": 3,
     }
 }
@@ -76,7 +76,7 @@ def create_webhook():
     :return:
     """
 
-    response = requests.put(kp.server + ':8000/v2/accounts/' + kp.get_acc_id() + '/webhooks', headers=headers, data=ws.jsonify(message2))
+    response = requests.put(kp.server + ':8000/v2/accounts/' + kp.get_acc_id() + '/webhooks', headers=headers, data=ws.jsonify(message1))
 
     return response
 

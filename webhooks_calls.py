@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import json
+from datetime import datetime
 from kazoo_put import get_auth_token
 from data_alchemy import insert_data
 
@@ -19,7 +20,7 @@ def parse_request(req):
     return json.dumps(req.json)
 
 
-@app.route('/kazoo/accounts', methods=['POST'])
+@app.route('/kazoo', methods=['POST'])
 def api_kz_hook():
     with app.test_request_context('/kazoo', method='POST'):
         """
@@ -32,14 +33,15 @@ def api_kz_hook():
         print('assertions passed')
 
     # if request.headers['Content-Type'] == 'x-www-form-urlencoded':
-    item_id = request.form.get('id')
-    item_type = request.form.get('type')
+    callee_id = request.form.get('callee_id_name')
+    caller_id = request.form.get('caller_id_name')
     account_id = request.form.get('account_id')
+    date_time = int(request.form.get('timestamp'))
+    date_time_obj = datetime.fromtimestamp(date_time)
 
-    print('this are the items: ', item_type, item_id, account_id)
-    insert_data(item_type, account_id, item_id, get_auth_token())
+    print('this are the items: ', caller_id, callee_id, account_id, date_time_obj)
 
-    # print(request.form)
+    print(request.form)
     return 'ok'
 
     # print(request.form)

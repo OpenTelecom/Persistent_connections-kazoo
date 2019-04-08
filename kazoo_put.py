@@ -10,7 +10,7 @@ def get_items(item_type, account_id, item_id, auth):
 
     """
     response = requests.get(
-        f'{server}:8000/v2/accounts/{account_id}/{item_type}s/{item_id}', headers=get_headers(auth))
+        '{}:8000/v2/accounts/{}/{}s/{}'.format(server, account_id, item_type, item_id), headers=get_headers(auth))
     return response.json()
 
 
@@ -97,14 +97,26 @@ def get_web_sockets():
     return wesockets
 
 
+def get_users():
+    # GET /v2/accounts/{ACCOUNT_ID}/users
+    auth = get_auth_token()
+    acc_id = get_acc_id()
+
+    headers = get_headers(auth)
+
+    _response = requests.get(
+        server + ':8000/v2/accounts/{}/users'.format(acc_id), headers=headers)
+    return _response
+
+
 if __name__ == '__main__':
     auth_token = get_auth_token()
 
-    get = get_response()
+    get = get_users()
     parsed = get.json()
 
     # parsed = j.loads(get.json())
 
-    print(get.json())
+    # print(get.json())
     print(j.dumps(parsed, indent=2, sort_keys=True))
     # print(j.dumps(get, indent=2, sort_keys=True))

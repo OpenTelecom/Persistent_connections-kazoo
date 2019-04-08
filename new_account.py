@@ -75,13 +75,9 @@ def get_auth_token():
 
 def get_api():
 
-    auth = get_auth_token()
+    var = 'yes'
 
-    headers = get_headers(auth)
-
-    api = requests.get(server + ':8000/v2/accounts/f50cfc5fad82d57c0820d3b8ee081361/api_key', headers=headers)
-
-    return api
+    return var
 
 
 def get_acc_id():
@@ -128,10 +124,10 @@ if __name__ == '__main__':
     # auth_token = get_auth_token()
 
     get = get_api()
-    parsed = get.json()
+    # parsed = get.json()
 
     # parsed = j.loads(get.json())
 
-    print(get.json())
-    print(j.dumps(parsed, indent=2, sort_keys=True))
+    print(get)
+    # print(j.dumps(parsed, indent=2, sort_keys=True))
     # print(j.dumps(get, indent=2, sort_keys=True))
