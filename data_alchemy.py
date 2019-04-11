@@ -5,9 +5,10 @@ from user import User
 from device import Device
 from account import Account
 from datetime import datetime
+from call import Call
 
 
-def insert_data(item_type, account_id, item_id, auth):
+def insert_data(item_type, account_id, item_id, auth, **users):
 
     Base.metadata.create_all(engine)
     session = Session()
@@ -52,14 +53,27 @@ def insert_data(item_type, account_id, item_id, auth):
         account = Account(item_id, account_name, datetime.now())
         session.add(account)
 
+    # def __init__(self, id_i, create_date, to, from_m, duration):
+    def create_call():
+        print('inserting calls')
+        # outbound = users.get('outbound')
+        # inbound = users.get('inbound')
+
+        to = session.query(User).get(users.get('outbound'))
+        from_u = session.query(User).get(users.get('inbound'))
+        to_name = users.get('callee')
+        from_name = users.get('caller')
+        duration = users.get('duration')
+        call = Call(item_id, datetime.now(), to_name, from_name, duration)
+        call.user = [to, from_u]
+        session.add(call)
+        # print(outbound, inbound, to_name, from_name, duration)
+
     if item_type == 'user':
         print('inserting users')
-        # create_user()
         q = session.query(User.id).filter(User.id == item_id)
         print(q)
         if not session.query(q.exists()).scalar():
-            # q = session.query(User).filter(User.id == item_id)
-            # session.query(q.)
             create_user()
 
     if item_type == 'account':
@@ -67,6 +81,8 @@ def insert_data(item_type, account_id, item_id, auth):
 
     if item_type == 'device':
         create_device()
+    if item_type == 'call':
+        create_call()
 
     session.commit()
     session.close()
