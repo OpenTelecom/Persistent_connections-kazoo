@@ -2,6 +2,7 @@ import requests
 import json as j
 
 server = 'http://18.218.219.1'
+interaction_id = '63722564695-04eab61e'
 
 
 def get_items(item_type, account_id, item_id, auth):
@@ -107,12 +108,38 @@ def get_users():
     _response = requests.get(
         server + ':8000/v2/accounts/{}/users'.format(acc_id), headers=headers)
     return _response
+# curl -v -X GET \
+#     -H "X-Auth-Token: {AUTH_TOKEN}" \
+#     http://{SERVER}:8000/v2/accounts/{ACCOUNT_ID}/cdrs/interaction
+
+
+def get_cdr():
+    auth = get_auth_token()
+    acc_id = get_acc_id()
+
+    headers = get_headers(auth)
+    response = requests.get(f'{server}:8000/v2/accounts/{acc_id}/cdrs/interaction', headers=headers)
+
+    return response
+# curl -v -X GET \
+#     -H "X-Auth-Token: {AUTH_TOKEN}" \
+#     http://{SERVER}:8000/v2/accounts/{ACCOUNT_ID}/cdrs/legs/{INTERACTION_ID}
+
+
+def get_cdr_specific():
+    auth = get_auth_token()
+    acc_id = get_acc_id()
+
+    headers = get_headers(auth)
+    response = requests.get(f'{server}:8000/v2/accounts/{acc_id}/cdrs/legs/{interaction_id}', headers=headers)
+
+    return response
 
 
 if __name__ == '__main__':
     auth_token = get_auth_token()
 
-    get = get_users()
+    get = get_cdr_specific()
     parsed = get.json()
 
     # parsed = j.loads(get.json())

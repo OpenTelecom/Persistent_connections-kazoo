@@ -2,14 +2,12 @@ from flask import Flask
 from flask import request
 from flask import json
 from datetime import datetime
-from account import Account
 from kazoo_put import get_auth_token, get_items
-from data_alchemy import insert_data
-from call import Call
 
 app = Flask(__name__)
 
 directory = {}
+call_ids = {}
 
 
 @app.route('/')
@@ -46,24 +44,31 @@ def api_kz_hook():
     duration_seconds = request.form.get('duration_seconds')
 
     user = get_items('user', account_id, user_id, get_auth_token())
-    print('this is user:{}'.format(user))
+    # call_deets = get_items('')
+    # print('this is user:{}'.format(user))
     data = user['data']
     user_id1 = data.get('id')
 
     if request.form.get('call_direction') == 'outbound':
         directory['outbound'] = user_id1
+        call_ids['outbound'] = call_id
     if request.form.get('call_direction') == 'inbound':
         directory['inbound'] = user_id1
+        call_ids['inbound'] = call_id
 
-    print('"this are the items : :from webhooks_calls "', caller_id, callee_id, account_id, date_time_obj)
+    # print('my call id', call_id)
+    print('my call ids', call_ids)
 
-    # print(request.form)
     print(directory)
     dir_len = len(directory)
     if dir_len == 2:
         print(dir_len)
-        print('inserting data')
-        insert_data('call', account_id, call_id, get_auth_token(), inbound=directory['inbound'], outbound=directory['outbound'], callee=callee_id, caller=caller_id, duration=duration_seconds)
+        # print('inserting data')
+        print('clear dict')
+        # directory.clear()
+        print(len(directory))
+        print(request.form)
+    #     insert_data('call', account_id, call_id, get_auth_token(), inbound=directory['inbound'], outbound=directory['outbound'], callee=callee_id, caller=caller_id, duration=duration_seconds)
     return 'ok'
 
 

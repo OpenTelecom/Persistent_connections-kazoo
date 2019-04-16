@@ -1,11 +1,11 @@
 import websockets as w
 import asyncio
 import json as j
+from data_alchemy import insert_data
 
 
 from websockets import ConnectionClosed
 import kazoo_put as kp
-
 
 
 # Global Variables
@@ -67,18 +67,25 @@ async def consumer(event):
     print(j.dumps(event, indent=2, sort_keys=True))
 
     data = event['data']
+    dir_inbound = data.get('call_direction')
+    callee = data.get('callee_id_name')
+    caller = data.get('caller_id_name')
+    duration = data.get('duration_seconds')
     call_vars = data.get('custom_channel_vars')
-    owner_id = call_vars.get('owner_id')
     interaction_id = call_vars.get('call_interaction_id')
-    print(data)
-    print('-' * 1000)
-    print(owner_id)
-    print(interaction_id)
-    # item_type = data.get('type')
-    # item_id = data.get('id')
-    # account_id = data.get('account_id')
+    account_id = call_vars.get('account_id')
+    print(f'callee: {callee}, caller: {caller}, duration: {duration}, interaction_id: {interaction_id}, account_id: {account_id}')
 
-    # print(f'item_type: {item_type}, item_id: {item_id}, account_id: {account_id}')
+    if dir_inbound == 'inbound':
+        print('inbound in, sending data to database')
+        inbound = call_vars.get('owner_id')
+        # print(inbound)
+        insert_data('call', account_id, interaction_id, auth_token, inbound=inbound, callee=callee, caller=caller, duration=duration)
+    elif dir_inbound == 'outbound':
+        print('outbound in, sending data to database')
+        inbound = call_vars.get('owner_id')
+        # print(inbound)
+        insert_data('call', account_id, interaction_id, auth_token, outbound=inbound, callee=callee, caller=caller, duration=duration)
 
 
 async def hello():

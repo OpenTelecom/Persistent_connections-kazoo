@@ -15,7 +15,6 @@ def insert_data(item_type, account_id, item_id, auth, **users):
 
     # def __init__(self, id_id, name, create_date, no_devices, email, account):
     def create_user():
-        print('Creating Users WOWOWOWOWOWO')
         item_user = kp.get_items(item_type=item_type, account_id=account_id, item_id=item_id, auth=auth)
         print('in data_alchemy', item_user)
 
@@ -56,17 +55,59 @@ def insert_data(item_type, account_id, item_id, auth, **users):
     # def __init__(self, id_i, create_date, to, from_m, duration):
     def create_call():
         print('inserting calls')
-        # outbound = users.get('outbound')
-        # inbound = users.get('inbound')
-
-        to = session.query(User).get(users.get('outbound'))
-        from_u = session.query(User).get(users.get('inbound'))
+        outbound = users.get('outbound')
+        print(outbound)
+        inbound = users.get('inbound')
+        print(inbound)
         to_name = users.get('callee')
         from_name = users.get('caller')
         duration = users.get('duration')
-        call = Call(item_id, datetime.now(), to_name, from_name, duration)
-        call.user = [to, from_u]
-        session.add(call)
+        if outbound is not None:
+            p = session.query(Call.id).filter(Call.id == item_id)
+            if not session.query(p.exists()).scalar():
+                print(type(p))
+                print(p)
+                print('in outbound original')
+                to = session.query(User).get(users.get('outbound'))
+                call = Call(item_id, datetime.now(), to_name, from_name, duration)
+                print('main, inbound-CallObject', call)
+                print('in outbound', outbound)
+                print('in outbound', inbound)
+                print(call.user)
+                call.user = [to]
+                print(call.user)
+                session.add('outbound', call)
+            else:
+                print('in else outbound')
+                to = session.query(User).get(users.get('outbound'))
+                call = session.query(Call).get(item_id)
+                print('else, inbound-CallObject', call)
+                print('else, outbound', call.user)
+                call.user.append(to)
+                print('else, outbound', call.user)
+
+        elif inbound is not None:
+            p = session.query(Call.id).filter(Call.id == item_id)
+            if not session.query(p.exists()).scalar():
+                print('in inbound original')
+                from_u = session.query(User).get(users.get('inbound'))
+                print(outbound)
+                print(inbound)
+                call = Call(item_id, datetime.now(), to_name, from_name, duration)
+                print('main, outbound-CallObject', call)
+                call.user = [from_u]
+                print('')
+                print('main, inbound', call.user)
+                session.add(call)
+            else:
+                print('in else inbound')
+                from_u = session.query(User).get(users.get('inbound'))
+                call = session.query(Call).get(item_id)
+                print('inbound-else-callObject', call)
+                print('else inbound', call.user)
+                call.user.append(from_u)
+                print(call.user)
+
         # print(outbound, inbound, to_name, from_name, duration)
 
     if item_type == 'user':
@@ -86,10 +127,3 @@ def insert_data(item_type, account_id, item_id, auth, **users):
 
     session.commit()
     session.close()
-
-
-
-
-
-
-
