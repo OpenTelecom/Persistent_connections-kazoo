@@ -1,6 +1,7 @@
 import requests
 import json as j
 
+
 server = 'http://18.218.219.1'
 interaction_id = '63722564695-04eab61e'
 
@@ -142,8 +143,4 @@ if __name__ == '__main__':
     get = get_cdr_specific()
     parsed = get.json()
 
-    # parsed = j.loads(get.json())
-
-    # print(get.json())
     print(j.dumps(parsed, indent=2, sort_keys=True))
-    # print(j.dumps(get, indent=2, sort_keys=True))

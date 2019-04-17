@@ -10,11 +10,6 @@ user = params.get('user')
 password = params.get('password')
 database = params.get('database')
 
-print(params)
-print(host)
-print(user)
-print(password)
-
 
 engine = create_engine(f'postgresql://{user}:{password}@{host}:5432/{database}')
 Session = sessionmaker(bind=engine)

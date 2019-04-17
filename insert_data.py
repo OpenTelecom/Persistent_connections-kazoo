@@ -1,7 +1,11 @@
 
 import psycopg2
 from config import config
-import json as j
+
+"""
+Example to set up tables in Postgres
+
+"""
 
 
 def insert_user(account_id, name, create_date):

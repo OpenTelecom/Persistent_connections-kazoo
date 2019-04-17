@@ -1,6 +1,6 @@
 from kazoo_put import get_users
 import json
-from kazoo_put import get_acc_id, get_auth_token
+from config import ACC_ID, AUTH_TOKEN
 
 from data_alchemy import insert_data
 
@@ -15,8 +15,8 @@ def insert_users():
     for customer in users_dict['data']:
         item_type = 'user'
         item_id = customer.get('id')
-        acc_id = get_acc_id()
-        insert_data(item_type, acc_id, item_id, get_auth_token())
+        acc_id = ACC_ID
+        insert_data(item_type, acc_id, item_id, AUTH_TOKEN)
 
 
 if __name__ == '__main__':

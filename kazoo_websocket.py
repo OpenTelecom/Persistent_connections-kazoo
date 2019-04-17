@@ -2,16 +2,8 @@ import websockets as w
 import asyncio
 import json as j
 
-
 from websockets import ConnectionClosed
-import kazoo_put as kp
-
-
-
-# Global Variables
-HOST = '18.218.219.1'
-auth_token = kp.get_auth_token()
-acc_id = kp.get_acc_id()
+from config import WEBSOCKET_Channel_Create, KAZOO_HOST
 
 
 def jsonify(d):
@@ -25,35 +17,6 @@ def jsonify(d):
 
 
 # subscription message to crossbar with single binding
-message = {
-    'action': 'subscribe',
-    'auth_token': auth_token,
-    'request_id': acc_id,
-    'data': {
-        'account_id': acc_id,
-        'binding': 'object.doc_created.user'
-    }
-}
-
-message1 = {
-    'action': 'subscribe',
-    'auth_token': auth_token,
-    'request_id': acc_id,
-    'data': {
-        'account_id': acc_id,
-        'binding': 'call.CHANNEL_CREATE.*'
-    }
-}
-
-message2 = {
-    'action': 'subscribe',
-    'auth_token': auth_token,
-    'request_id': acc_id,
-    'data': {
-        'account_id': acc_id,
-        'binding': 'call.CHANNEL_DESTROY.*'
-    }
-}
 
 
 async def consumer(event):
@@ -87,9 +50,9 @@ async def hello():
     :return:
     """
     print('trying to connect')
-    async with w.connect(f"ws://{HOST}:5555") as ws:
+    async with w.connect(f"ws://{KAZOO_HOST}:5555") as ws:
         print('connected')
-        await ws.send(jsonify(message2))
+        await ws.send(jsonify(WEBSOCKET_Channel_Create))
         try:
             response = await ws.recv()
             print(response)

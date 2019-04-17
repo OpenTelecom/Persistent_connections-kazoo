@@ -65,50 +65,26 @@ def insert_data(item_type, account_id, item_id, auth, **users):
         if outbound is not None:
             p = session.query(Call.id).filter(Call.id == item_id)
             if not session.query(p.exists()).scalar():
-                # print(type(p))
-                # print(p)
-                # print('in outbound original')
                 to = session.query(User).get(users.get('outbound'))
                 call = Call(item_id, datetime.now(), to_name, from_name, duration)
-                # print('main, inbound-CallObject', call)
-                # print('in outbound', outbound)
-                # print('in outbound', inbound)
-                # print(call.user)
                 call.user = [to]
-                # print(call.user)
                 session.add(call)
             else:
-                # print('in else outbound')
                 to = session.query(User).get(users.get('outbound'))
                 call = session.query(Call).get(item_id)
-                # print('else, inbound-CallObject', call)
-                # print('else, outbound', call.user)
                 call.user.append(to)
-                # print('else, outbound', call.user)
 
         elif inbound is not None:
             p = session.query(Call.id).filter(Call.id == item_id)
             if not session.query(p.exists()).scalar():
-                # print('in inbound original')
                 from_u = session.query(User).get(users.get('inbound'))
-                # print(outbound)
-                # print(inbound)
                 call = Call(item_id, datetime.now(), to_name, from_name, duration)
-                # print('main, outbound-CallObject', call)
                 call.user = [from_u]
-                # print('')
-                # print('main, inbound', call.user)
                 session.add(call)
             else:
-                # print('in else inbound')
                 from_u = session.query(User).get(users.get('inbound'))
                 call = session.query(Call).get(item_id)
-                # print('inbound-else-callObject', call)
-                # print('else inbound', call.user)
                 call.user.append(from_u)
-                # print(call.user)
-
-        # print(outbound, inbound, to_name, from_name, duration)
 
     if item_type == 'user':
         print('inserting users')
